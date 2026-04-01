@@ -1,7 +1,8 @@
 # Claude Code Any Buddy
-⚠️ Not tested on Windows, if claude session does not start after using this tool use the restore command or you may need to reinstall claude code. I have tested this on linux and mac and seems to work well
 
-Feel free to open a windows PR if you know what the issue is
+⚠️ Thanks to a PR it seems like we may have it working on Windows now with NPM based installs of claude code thanks @jtuskan
+
+Feel free to open a windows PR if you find any other issues
 
 Pick any Claude Code companion pet you want.
 
@@ -38,11 +39,11 @@ The patch is safe — it uses `rename()` to atomically swap the binary, which is
 
 ### Platform support
 
-| Platform | Status | Binary location (auto-detected) |
-|---|---|---|
-| Linux | Tested | `~/.local/share/claude/versions/<ver>` |
-| macOS | Tested | `~/.local/bin/claude`, `/opt/homebrew/bin/claude`, `~/.claude/local/claude` |
-| Windows | Should work | `%LOCALAPPDATA%\Programs\claude\claude.exe`, npm global shim |
+| Platform | Status      | Binary location (auto-detected)                                             |
+| -------- | ----------- | --------------------------------------------------------------------------- |
+| Linux    | Tested      | `~/.local/share/claude/versions/<ver>`                                      |
+| macOS    | Tested      | `~/.local/bin/claude`, `/opt/homebrew/bin/claude`, `~/.claude/local/claude` |
+| Windows  | Should work | `%LOCALAPPDATA%\Programs\claude\claude.exe`, npm global shim                |
 
 The binary is found automatically via `which`/`where` and platform-specific known paths. If auto-detection fails, set `CLAUDE_BINARY=/path/to/binary` manually.
 
@@ -98,20 +99,20 @@ any-buddy --species dragon --rarity legendary --eye '✦' --hat wizard --name Dr
 
 ### CLI flags
 
-| Flag | Short | Description |
-|---|---|---|
-| `--species <name>` | `-s` | Pre-select species |
-| `--rarity <level>` | `-r` | Pre-select rarity |
-| `--eye <char>` | `-e` | Pre-select eye style |
-| `--hat <name>` | `-t` | Pre-select hat |
-| `--name <name>` | `-n` | Rename your companion |
-| `--personality <desc>` | `-p` | Set companion personality (controls speech bubble tone) |
-| `--yes` | `-y` | Skip all confirmation prompts |
-| `--shiny` | | Require shiny variant (~100x longer search) |
-| `--peak <stat>` | | Best stat: DEBUGGING, PATIENCE, CHAOS, WISDOM, or SNARK |
-| `--dump <stat>` | | Worst stat (~20x longer search with both) |
-| `--no-hook` | | Don't offer to install the auto-patch hook |
-| `--silent` | | Suppress output (for `apply` in hooks) |
+| Flag                   | Short | Description                                             |
+| ---------------------- | ----- | ------------------------------------------------------- |
+| `--species <name>`     | `-s`  | Pre-select species                                      |
+| `--rarity <level>`     | `-r`  | Pre-select rarity                                       |
+| `--eye <char>`         | `-e`  | Pre-select eye style                                    |
+| `--hat <name>`         | `-t`  | Pre-select hat                                          |
+| `--name <name>`        | `-n`  | Rename your companion                                   |
+| `--personality <desc>` | `-p`  | Set companion personality (controls speech bubble tone) |
+| `--yes`                | `-y`  | Skip all confirmation prompts                           |
+| `--shiny`              |       | Require shiny variant (~100x longer search)             |
+| `--peak <stat>`        |       | Best stat: DEBUGGING, PATIENCE, CHAOS, WISDOM, or SNARK |
+| `--dump <stat>`        |       | Worst stat (~20x longer search with both)               |
+| `--no-hook`            |       | Don't offer to install the auto-patch hook              |
+| `--silent`             |       | Suppress output (for `apply` in hooks)                  |
 
 Any flag you don't provide will be prompted interactively.
 
@@ -157,13 +158,13 @@ capybara    cactus      robot       rabbit      mushroom    chonk
 
 ### Rarities
 
-| Rarity | Stars | Normal odds | Stat floor |
-|---|---|---|---|
-| Common | ★ | 60% | 5 |
-| Uncommon | ★★ | 25% | 15 |
-| Rare | ★★★ | 10% | 25 |
-| Epic | ★★★★ | 4% | 35 |
-| Legendary | ★★★★★ | 1% | 50 |
+| Rarity    | Stars | Normal odds | Stat floor |
+| --------- | ----- | ----------- | ---------- |
+| Common    | ★     | 60%         | 5          |
+| Uncommon  | ★★    | 25%         | 15         |
+| Rare      | ★★★   | 10%         | 25         |
+| Epic      | ★★★★  | 4%          | 35         |
+| Legendary | ★★★★★ | 1%          | 50         |
 
 Common rarity pets get no hat. All other rarities roll a random hat.
 
@@ -171,14 +172,14 @@ Common rarity pets get no hat. All other rarities roll a random hat.
 
 Six eye styles available on every species:
 
-| Style | Character |
-|---|---|
-| Dot | `·` |
-| Sparkle | `✦` |
-| Cross | `×` |
-| Circle | `◉` |
-| At | `@` |
-| Degree | `°` |
+| Style   | Character |
+| ------- | --------- |
+| Dot     | `·`       |
+| Sparkle | `✦`       |
+| Cross   | `×`       |
+| Circle  | `◉`       |
+| At      | `@`       |
+| Degree  | `°`       |
 
 ### Hats
 
@@ -222,6 +223,7 @@ When you choose to install the hook, it adds this to `~/.claude/settings.json`:
 The hook is **optional and defaults to No** — you'll be asked during the interactive flow. If you prefer, just run `any-buddy apply` manually after Claude Code updates.
 
 On every Claude Code session start, this runs `apply --silent` which:
+
 1. Reads your saved salt from `~/.any-buddy.json`
 2. Checks if the current binary already has the correct salt (fast `Buffer.indexOf`)
 3. If not (Claude updated), re-patches — same string replacement, same logic
@@ -232,10 +234,12 @@ The hook adds negligible startup time (~50ms) when no patch is needed.
 ## How the binary patch works
 
 Claude Code is a compiled Bun binary (ELF on Linux, Mach-O on macOS) at `~/.local/share/claude/versions/<version>` (Linux) or the path shown by `which claude`. The salt string `"friend-2026-401"` appears exactly 3 times:
+
 - 2 occurrences in the bundled JavaScript code sections
 - 1 occurrence in a string table / data section
 
 The patch:
+
 1. Reads the binary into a buffer
 2. Finds all 3 occurrences of the old salt
 3. Replaces each with the new salt (always exactly 15 characters — same length, no byte offset shifts)
@@ -249,12 +253,12 @@ A backup is always created at `<binary-path>.anybuddy-bak` before the first patc
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `~/.claude.json` | Read-only — your user ID is read from here |
+| File                            | Purpose                                                                     |
+| ------------------------------- | --------------------------------------------------------------------------- |
+| `~/.claude.json`                | Read-only — your user ID is read from here                                  |
 | `~/.claude-code-any-buddy.json` | Stores your chosen salt and pet config (legacy name kept for compatibility) |
-| `~/.claude/settings.json` | SessionStart hook is added here (optional) |
-| `<binary>.anybuddy-bak` | Backup of the original binary |
+| `~/.claude/settings.json`       | SessionStart hook is added here (optional)                                  |
+| `<binary>.anybuddy-bak`         | Backup of the original binary                                               |
 
 ## Restoring
 
@@ -272,7 +276,7 @@ This patches the salt back to the original, removes the SessionStart hook, and c
 - **Salt string dependent** — if Anthropic changes the salt from `friend-2026-401` in a future version, the patch logic would need updating (but the tool will detect this and warn you)
 - **Stats partially selectable** — you can pick which stat is highest (peak) and lowest (dump), but not exact values
 - **Personality** — generated by Claude on first `/buddy` run after patching, not controlled by this tool. Delete the `companion` key from `~/.claude.json` to re-hatch with a new personality
-- **Speech bubble** — your buddy's speech bubble reactions are generated by Claude based on the personality and name stored in `~/.claude.json`. After patching the visual, the buddy will still *talk* like the original personality unless you update it. Use the interactive prompt or `--personality "your description here"` to change what your buddy says
+- **Speech bubble** — your buddy's speech bubble reactions are generated by Claude based on the personality and name stored in `~/.claude.json`. After patching the visual, the buddy will still _talk_ like the original personality unless you update it. Use the interactive prompt or `--personality "your description here"` to change what your buddy says
 - **Name** — can be changed at any time via the interactive flow or `--name` flag (edits `~/.claude.json` directly)
 
 ## License
