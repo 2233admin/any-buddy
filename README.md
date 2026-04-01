@@ -2,6 +2,12 @@
 
 Pick any Claude Code companion pet you want.
 
+```bash
+npx any-buddy
+```
+
+That's it. Follow the prompts to choose your species, rarity, eyes, hat, and name.
+
 Claude Code assigns you a deterministic pet based on your account ID — you can't change it through normal means. This tool lets you choose your own species, rarity, eyes, and hat, then patches the Claude Code binary to make it happen.
 
 <p align="center">
