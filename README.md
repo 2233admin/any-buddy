@@ -85,6 +85,9 @@ claude-code-any-buddy apply --silent
 # Restore original pet
 claude-code-any-buddy restore
 
+# Delete companion so Claude Code re-hatches a fresh one on next /buddy
+claude-code-any-buddy rehatch
+
 # Non-interactive with flags (skip prompts you already know the answer to)
 claude-code-any-buddy --species dragon --rarity legendary --eye '✦' --hat wizard --name Draco --yes
 ```

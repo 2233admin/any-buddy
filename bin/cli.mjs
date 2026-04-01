@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { runInteractive, runPreview, runCurrent, runApply, runRestore } from '../lib/tui.mjs';
+import { runInteractive, runPreview, runCurrent, runApply, runRestore, runRehatch } from '../lib/tui.mjs';
 
 function parseArgs(argv) {
   const args = argv.slice(2);
@@ -43,6 +43,9 @@ try {
     case 'restore':
       await runRestore();
       break;
+    case 'rehatch':
+      await runRehatch();
+      break;
     case 'help':
       printHelp();
       break;
@@ -78,6 +81,7 @@ Usage:
   claude-code-any-buddy current                  Show your current pet
   claude-code-any-buddy apply [--silent]         Re-apply saved pet after update
   claude-code-any-buddy restore                  Restore original pet
+  claude-code-any-buddy rehatch                  Delete companion to re-hatch via /buddy
 
 Options:
   -s, --species <name>   Species (duck, goose, blob, cat, dragon, octopus, owl,
