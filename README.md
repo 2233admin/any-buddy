@@ -202,13 +202,20 @@ When you choose to install the hook, it adds this to `~/.claude/settings.json`:
   "hooks": {
     "SessionStart": [
       {
-        "type": "command",
-        "command": "claude-code-any-buddy apply --silent"
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-any-buddy apply --silent"
+          }
+        ]
       }
     ]
   }
 }
 ```
+
+The hook is **optional and defaults to No** — you'll be asked during the interactive flow. If you prefer, just run `any-buddy apply` manually after Claude Code updates.
 
 On every Claude Code session start, this runs `apply --silent` which:
 1. Reads your saved salt from `~/.claude-code-any-buddy.json`
