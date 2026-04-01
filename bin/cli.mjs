@@ -70,18 +70,18 @@ try {
 
 function printHelp() {
   console.log(`
-claude-code-any-buddy — Pick any Claude Code companion pet
+any-buddy — Pick any Claude Code companion pet
 
 Usage:
-  claude-code-any-buddy                          Interactive pet picker
-  claude-code-any-buddy --species dragon         Skip species prompt
-  claude-code-any-buddy -s cat -r legendary -e ✦ -t wizard -y
-                                                 Fully non-interactive
-  claude-code-any-buddy preview                  Browse pets without applying
-  claude-code-any-buddy current                  Show your current pet
-  claude-code-any-buddy apply [--silent]         Re-apply saved pet after update
-  claude-code-any-buddy restore                  Restore original pet
-  claude-code-any-buddy rehatch                  Delete companion to re-hatch via /buddy
+  any-buddy                          Interactive pet picker
+  any-buddy --species dragon         Skip species prompt
+  any-buddy -s cat -r legendary -e ✦ -t wizard -y
+                                     Fully non-interactive
+  any-buddy preview                  Browse pets without applying
+  any-buddy current                  Show your current pet
+  any-buddy apply [--silent]         Re-apply saved pet after update
+  any-buddy restore                  Restore original pet
+  any-buddy rehatch                  Delete companion to re-hatch via /buddy
 
 Options:
   -s, --species <name>   Species (duck, goose, blob, cat, dragon, octopus, owl,

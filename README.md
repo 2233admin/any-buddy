@@ -12,14 +12,14 @@ That's it. Follow the prompts to choose your species, rarity, eyes, hat, and nam
 Claude Code assigns you a deterministic pet based on your account ID — you can't change it through normal means. This tool lets you choose your own species, rarity, eyes, and hat, then patches the Claude Code binary to make it happen.
 
 <p align="center">
-  <img src="assets/demo.svg" alt="Demo of claude-code-any-buddy" width="700">
+  <img src="assets/demo.svg" alt="Demo of any-buddy" width="700">
 </p>
 
 ## How it works
 
 Claude Code's companion system generates your pet's visual traits (species, rarity, eyes, hat) by hashing your user ID with a salt string (`friend-2026-401`), then feeding that hash into a deterministic PRNG (Mulberry32). The result is always the same pet for the same user — and it's recalculated on every launch, so you can't override it through config files.
 
-**claude-code-any-buddy** works by:
+**any-buddy** works by:
 
 1. **You pick** your desired species, rarity, eyes, and hat through an interactive TUI
 2. **Brute-force search** finds a replacement salt string that produces your chosen pet when combined with your real user ID (typically takes <100ms)
@@ -70,28 +70,28 @@ npm install -g any-buddy
 
 ```bash
 # Interactive pet picker (default) — pick your pet and apply
-claude-code-any-buddy
+any-buddy
 
 # Show your current pet
-claude-code-any-buddy current
+any-buddy current
 
 # Browse and preview pets without applying
-claude-code-any-buddy preview
+any-buddy preview
 
 # Re-apply saved pet after a Claude Code update
-claude-code-any-buddy apply
+any-buddy apply
 
 # Silent re-apply (used by the SessionStart hook)
-claude-code-any-buddy apply --silent
+any-buddy apply --silent
 
 # Restore original pet
-claude-code-any-buddy restore
+any-buddy restore
 
 # Delete companion so Claude Code re-hatches a fresh one on next /buddy
-claude-code-any-buddy rehatch
+any-buddy rehatch
 
 # Non-interactive with flags (skip prompts you already know the answer to)
-claude-code-any-buddy --species dragon --rarity legendary --eye '✦' --hat wizard --name Draco --yes
+any-buddy --species dragon --rarity legendary --eye '✦' --hat wizard --name Draco --yes
 ```
 
 ### CLI flags
@@ -208,7 +208,7 @@ When you choose to install the hook, it adds this to `~/.claude/settings.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-any-buddy apply --silent"
+            "command": "any-buddy apply --silent"
           }
         ]
       }
@@ -220,7 +220,7 @@ When you choose to install the hook, it adds this to `~/.claude/settings.json`:
 The hook is **optional and defaults to No** — you'll be asked during the interactive flow. If you prefer, just run `any-buddy apply` manually after Claude Code updates.
 
 On every Claude Code session start, this runs `apply --silent` which:
-1. Reads your saved salt from `~/.claude-code-any-buddy.json`
+1. Reads your saved salt from `~/.any-buddy.json`
 2. Checks if the current binary already has the correct salt (fast `Buffer.indexOf`)
 3. If not (Claude updated), re-patches — same string replacement, same logic
 4. Silent mode: produces no output unless a patch was actually applied
@@ -250,7 +250,7 @@ A backup is always created at `<binary-path>.anybuddy-bak` before the first patc
 | File | Purpose |
 |---|---|
 | `~/.claude.json` | Read-only — your user ID is read from here |
-| `~/.claude-code-any-buddy.json` | Stores your chosen salt and pet config |
+| `~/.claude-code-any-buddy.json` | Stores your chosen salt and pet config (legacy name kept for compatibility) |
 | `~/.claude/settings.json` | SessionStart hook is added here (optional) |
 | `<binary>.anybuddy-bak` | Backup of the original binary |
 
@@ -258,7 +258,7 @@ A backup is always created at `<binary-path>.anybuddy-bak` before the first patc
 
 ```bash
 # Restore original pet and remove the hook
-claude-code-any-buddy restore
+any-buddy restore
 ```
 
 This patches the salt back to the original, removes the SessionStart hook, and clears the saved config.

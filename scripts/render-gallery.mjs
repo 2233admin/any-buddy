@@ -19,7 +19,7 @@ function padRight(str, len) {
 
 // ─── Hero banner ───
 console.log();
-console.log(chalk.bold.cyan('  claude-code-any-buddy'));
+console.log(chalk.bold.cyan('  any-buddy'));
 console.log(chalk.dim('  Pick any Claude Code companion pet you want'));
 console.log();
 

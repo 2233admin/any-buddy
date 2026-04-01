@@ -12,7 +12,7 @@ const RARITY_CHALK = {
 };
 
 console.log();
-console.log(chalk.bold.cyan('  claude-code-any-buddy'));
+console.log(chalk.bold.cyan('  any-buddy'));
 console.log(chalk.dim('  Pick any Claude Code companion pet'));
 console.log();
 console.log(chalk.dim('  User ID: d6242b55-d9f9-43...\n'));

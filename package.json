@@ -1,11 +1,10 @@
 {
   "name": "any-buddy",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Pick any Claude Code companion pet you want",
   "type": "module",
   "bin": {
-    "any-buddy": "./bin/cli.mjs",
-    "claude-code-any-buddy": "./bin/cli.mjs"
+    "any-buddy": "./bin/cli.mjs"
   },
   "files": [
     "bin/",
