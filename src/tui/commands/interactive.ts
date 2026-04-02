@@ -280,20 +280,10 @@ export async function runInteractive(flags: CliFlags = {}): Promise<void> {
     }));
 
   if (!applyNow) {
-    // Persist salt to v2 config so `any-buddy apply` can use it later
-    const skipConfig = loadPetConfigV2() ?? {
-      version: 2 as const,
-      activeProfile: null,
-      salt: ORIGINAL_SALT,
-      profiles: {},
-    };
-    skipConfig.salt = result.salt;
-    skipConfig.appliedAt = new Date().toISOString();
-    savePetConfigV2(skipConfig);
     if (profileName) {
       console.log(chalk.dim('  Use any-buddy switch to activate it later.\n'));
     } else {
-      console.log(chalk.dim('  Salt saved. Apply later with: any-buddy apply\n'));
+      console.log(chalk.dim('  Not saved. Run any-buddy again to find another.\n'));
     }
     return;
   }

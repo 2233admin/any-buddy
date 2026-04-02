@@ -5,7 +5,6 @@ export {
   savePetConfigV2,
   saveProfile,
   getProfiles,
-  getActiveProfile,
   switchToProfile,
   deleteProfile,
 } from './pet-config.ts';

@@ -1,7 +1,7 @@
 import type { Bones, ProfileData } from '@/types.js';
 import { ORIGINAL_SALT } from '@/constants.js';
 import { roll } from '@/generation/index.js';
-import { getProfiles, getActiveProfile } from '@/config/index.js';
+import { getProfiles, loadPetConfigV2 } from '@/config/index.js';
 import { isNodeRuntime } from '@/patcher/salt-ops.js';
 
 export interface GalleryEntry {
@@ -20,13 +20,13 @@ export interface GalleryState {
 export function buildGalleryEntries(userId: string, binaryPath: string): GalleryEntry[] {
   const useNodeHash = isNodeRuntime(binaryPath);
   const profiles = getProfiles();
-  const active = getActiveProfile();
+  const currentSalt = loadPetConfigV2()?.salt ?? ORIGINAL_SALT;
 
   const defaultBones = roll(userId, ORIGINAL_SALT, { useNodeHash }).bones;
   const defaultEntry: GalleryEntry = {
     name: 'Original',
     isDefault: true,
-    isActive: active === null,
+    isActive: currentSalt === ORIGINAL_SALT,
     bones: defaultBones,
     profile: null,
   };
@@ -34,7 +34,7 @@ export function buildGalleryEntries(userId: string, binaryPath: string): Gallery
   const profileEntries: GalleryEntry[] = Object.entries(profiles).map(([name, profile]) => ({
     name,
     isDefault: false,
-    isActive: name === active,
+    isActive: profile.salt === currentSalt,
     bones: roll(userId, profile.salt, { useNodeHash }).bones,
     profile,
   }));
