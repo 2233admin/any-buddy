@@ -76,6 +76,7 @@ export function createGalleryPreviewPanel(parent: OTUIRenderable): GalleryPrevie
   function update(entry: GalleryEntry): void {
     if (!nameText || !spriteText || !titleText || !detailsText || !statsText || !personalityText)
       return;
+    if (currentEntry === entry) return;
 
     currentEntry = entry;
     lastRenderedFrame = -1;
