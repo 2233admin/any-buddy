@@ -15,13 +15,13 @@ import {
   getCompanionPersonality,
   setCompanionPersonality,
 } from '@/config/index.js';
-import { banner, showPet, warnCodesign } from '../display.ts';
+import { banner, showPet, warnCodesign } from '@/tui/display.js';
 import {
   buildGalleryEntries,
   activeEntryIndex,
   DEFAULT_PROFILE,
   type GalleryEntry,
-} from '../gallery/state.ts';
+} from '@/tui/gallery/state.js';
 
 const MIN_SALT_COUNT = platform() === 'win32' ? 1 : 3;
 

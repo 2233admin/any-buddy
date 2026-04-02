@@ -8,7 +8,7 @@ import {
   HIGHLIGHT_BG,
   HIGHLIGHT_FG,
   DIM_COLOR,
-} from '../builder/colors.ts';
+} from '@/tui/builder/colors.js';
 import type { GalleryState, GalleryEntry } from './state.ts';
 
 const ENTRY_HEIGHT = 2;

@@ -1,6 +1,6 @@
 import type { CliFlags, DesiredTraits } from '@/types.js';
 import { ISSUE_URL } from '@/constants.js';
-import { createAnimator } from '../animator.ts';
+import { createAnimator } from '@/tui/animator.js';
 import {
   createInitialState,
   stateToDesiredTraits,

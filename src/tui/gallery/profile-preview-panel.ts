@@ -3,8 +3,8 @@ import { Box, Text } from '@opentui/core';
 import type { Renderable as OTUIRenderable } from '@opentui/core';
 import { renderAnimatedSprite, IDLE_SEQUENCE } from '@/sprites/index.js';
 import { RARITY_STARS } from '@/constants.js';
-import { RARITY_HEX, BORDER_COLOR, HELP_COLOR } from '../builder/colors.ts';
-import { renderStatBarsFromStats } from '../builder/stat-bars.ts';
+import { RARITY_HEX, BORDER_COLOR, HELP_COLOR } from '@/tui/builder/colors.js';
+import { renderStatBarsFromStats } from '@/tui/builder/stat-bars.js';
 import type { GalleryEntry } from './state.ts';
 
 export interface GalleryPreviewPanel {

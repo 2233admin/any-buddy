@@ -1,7 +1,7 @@
 import { ISSUE_URL } from '@/constants.js';
-import { canUseBuilder } from '../builder/index.ts';
-import { BORDER_COLOR, DIM_COLOR, FOCUS_BORDER } from '../builder/colors.ts';
-import { createAnimator } from '../animator.ts';
+import { canUseBuilder } from '@/tui/builder/index.js';
+import { BORDER_COLOR, DIM_COLOR, FOCUS_BORDER } from '@/tui/builder/colors.js';
+import { createAnimator } from '@/tui/animator.js';
 import { DEFAULT_PROFILE, type GalleryEntry, type GalleryState } from './state.ts';
 
 export type GalleryResult = { action: 'apply'; profileName: string } | { action: 'cancel' };
