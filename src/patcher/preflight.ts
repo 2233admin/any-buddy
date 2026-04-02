@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import type { PreflightResult } from '@/types.js';
 import { ORIGINAL_SALT, ISSUE_URL, diagnostics } from '@/constants.js';
 import { findClaudeBinary, findBunBinary } from './binary-finder.ts';
+import { restoreBinary } from './patch.ts';
 import { verifySalt, isNodeRuntime } from './salt-ops.ts';
 import { getClaudeUserId, loadPetConfig } from '@/config/index.js';
 
@@ -73,13 +74,33 @@ export function runPreflight({ requireBinary = true } = {}): PreflightResult {
                   '  Re-patching will replace it with your new selection.',
               );
             } else {
-              errors.push(
-                `Neither the original salt nor your saved salt were found in ${binaryPath}.\n` +
-                  '  The binary may have been updated or patched by another tool.\n' +
-                  '  Try: any-buddy restore\n\n' +
-                  diagnostics({ Binary: binaryPath }) +
-                  `\n  Please report this at: ${ISSUE_URL}`,
+              // Try to auto-restore from backup
+              console.log(
+                chalk.yellow('  Salt mismatch detected — attempting to restore from backup...'),
               );
+              try {
+                restoreBinary(binaryPath);
+                const recheck = verifySalt(binaryPath, ORIGINAL_SALT);
+                if (recheck.found > 0) {
+                  saltCount = recheck.found;
+                  console.log(chalk.green('  Restored successfully.\n'));
+                } else {
+                  errors.push(
+                    `Restore succeeded but original salt still not found in ${binaryPath}.\n` +
+                      '  The binary may have been updated with a new salt.\n\n' +
+                      diagnostics({ Binary: binaryPath }) +
+                      `\n  Please report this at: ${ISSUE_URL}`,
+                  );
+                }
+              } catch {
+                errors.push(
+                  `Neither the original salt nor your saved salt were found in ${binaryPath}.\n` +
+                    '  No backup available to restore from.\n' +
+                    '  Try reinstalling Claude Code, then run any-buddy again.\n\n' +
+                    diagnostics({ Binary: binaryPath }) +
+                    `\n  Please report this at: ${ISSUE_URL}`,
+                );
+              }
             }
           } else {
             errors.push(
