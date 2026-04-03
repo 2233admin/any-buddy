@@ -8,8 +8,29 @@ import {
   getMinSaltCount,
 } from '@/patcher/salt-ops.js';
 import { patchBinary } from '@/patcher/patch.js';
-import { loadPetConfig } from '@/config/index.js';
+import {
+  loadPetConfig,
+  loadPetConfigV2,
+  renameCompanion,
+  setCompanionPersonality,
+} from '@/config/index.js';
 import { warnCodesign } from '../display.ts';
+
+function restoreProfileIdentity(salt: string): void {
+  const configV2 = loadPetConfigV2();
+  const profile = configV2?.profiles[salt];
+  if (!profile) return;
+  try {
+    if (profile.name) renameCompanion(profile.name);
+  } catch {
+    /* companion may not be hatched yet */
+  }
+  try {
+    if (profile.personality) setCompanionPersonality(profile.personality);
+  } catch {
+    /* companion may not be hatched yet */
+  }
+}
 
 export async function runApply({ silent = false } = {}): Promise<void> {
   const config = loadPetConfig();
@@ -29,6 +50,7 @@ export async function runApply({ silent = false } = {}): Promise<void> {
   const check = verifySalt(binaryPath, config.salt);
   if (check.found >= getMinSaltCount(binaryPath)) {
     if (!silent) console.log(chalk.green('  Pet already applied.'));
+    restoreProfileIdentity(config.salt);
     return;
   }
 
@@ -44,6 +66,7 @@ export async function runApply({ silent = false } = {}): Promise<void> {
           console.log(chalk.green(`  Re-patched (${result.replacements} replacements).`));
         }
         warnCodesign(result, binaryPath);
+        restoreProfileIdentity(config.salt);
         return;
       }
     }
@@ -54,6 +77,7 @@ export async function runApply({ silent = false } = {}): Promise<void> {
         console.log(chalk.green(`  Patched after update (${result.replacements} replacements).`));
       }
       warnCodesign(result, binaryPath);
+      restoreProfileIdentity(config.salt);
       return;
     }
     if (!silent)
@@ -71,4 +95,5 @@ export async function runApply({ silent = false } = {}): Promise<void> {
       console.log(chalk.yellow('  Restart Claude Code for the change to take effect.'));
     }
   }
+  restoreProfileIdentity(config.salt);
 }
