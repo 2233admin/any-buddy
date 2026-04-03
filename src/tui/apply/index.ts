@@ -586,7 +586,7 @@ export async function runApplyTUI(
 
           case 'personality':
             if (key.name === 'return' && activeSelect) {
-              const idx = activeSelect.selectedIndex;
+              const idx = activeSelect.getSelectedIndex();
               const speciesDefault = DEFAULT_PERSONALITIES[desired.species] ?? null;
               const values = speciesDefault ? ['keep', 'default', 'custom'] : ['keep', 'custom'];
               const choice = values[idx];
