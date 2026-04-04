@@ -12,6 +12,8 @@ import {
   switchToProfile,
   saveProfile,
   deleteProfile,
+  isHookInstalled,
+  installHook,
   getCompanionName,
   renameCompanion,
   getCompanionPersonality,
@@ -151,7 +153,7 @@ export async function runBuddies(): Promise<void> {
     return;
   }
 
-  // Update config
+  // Update config — reload fresh before writing to avoid clobbering saveProfile(outgoing) above
   if (isDefault) {
     // Reload fresh so we don't clobber profile writes made by saveProfile(outgoing) above
     const freshConfig = loadPetConfigV2();
@@ -166,9 +168,18 @@ export async function runBuddies(): Promise<void> {
     switchToProfile(selectedSalt);
   }
 
-  // Restore incoming profile's companion identity
+  // Auto-install hook so the buddy survives Claude Code auto-updates
+  if (!isHookInstalled()) {
+    installHook();
+    console.log(
+      chalk.dim('  SessionStart hook installed — pet auto-re-applies after Claude Code updates.'),
+    );
+  }
+
+  // Restore incoming profile's companion identity — reload fresh to get switchToProfile's write
   if (!isDefault) {
-    const incoming = config?.profiles[selectedSalt];
+    const freshConfig = loadPetConfigV2();
+    const incoming = freshConfig?.profiles[selectedSalt];
     if (incoming?.name) {
       try {
         renameCompanion(incoming.name);

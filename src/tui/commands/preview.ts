@@ -11,7 +11,7 @@ import { RARITY_CHALK } from '../format.ts';
 
 function runPreviewAll(): void {
   const cols = process.stdout.columns ?? 80;
-  const rule = chalk.dim('  ' + '─'.repeat(Math.min(cols - 4, 60)));
+  const rule = chalk.dim('  ' + '─'.repeat(Math.min(Math.max(0, cols - 4), 60)));
 
   console.log(chalk.bold(`\n  Preset gallery  `) + chalk.dim(`(${PRESETS.length} presets)\n`));
 
