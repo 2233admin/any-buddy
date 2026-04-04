@@ -90,7 +90,7 @@ const { command, flags } = parseArgs(process.argv);
 try {
   switch (command) {
     case 'apply':
-      await runApply({ silent: flags.silent });
+      await runApply({ silent: flags.silent, noHook: flags.noHook });
       break;
     case 'preview':
       await runPreview(flags);
